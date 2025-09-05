@@ -196,35 +196,32 @@ with col2:
     )
 
 # Main content area
+# Main content area
 if uploaded_file is not None:
-    # Read the uploaded image file
-    image = Image.open(uploaded_file)
-
-    # --- START: RESIZING LOGIC ---
-    # Define a max size
+    # Read the uploaded image file and convert to RGB
+    image = Image.open(uploaded_file).convert("RGB")
+    
+    # --- Resizing Logic (optional but good to keep) ---
     MAX_SIZE = (1000, 1000)
-
-    # Check if the image is larger than the max size
-    if image.size[0] > MAX_SIZE[0] or image.size[1] > MAX_SIZE[1]:
-        st.info("Image is large, resizing for optimal performance...")
-        # The thumbnail method resizes the image in-place and maintains aspect ratio
-        image.thumbnail(MAX_SIZE)
-    # --- END: RESIZING LOGIC ---
-
-    img_array = np.array(image) # Convert the (potentially resized) image to an array
+    image.thumbnail(MAX_SIZE)
+    # --- End Resizing ---
+    
+    # Convert the PIL image to a NumPy array
+    img_array = np.array(image)
     
     # Create two columns for image display
     img_col1, img_col2 = st.columns([1, 1])
     
     with img_col1:
         st.markdown("### 🖼️ Original Image")
-        st.image(image, use_column_width=True)
+        # Display the image from the NumPy array
+        st.image(img_array, use_column_width=True)
         
         # Add image stats
         st.markdown(f"""
         <div style="margin-top: 1rem;">
             <span class="stat-badge">📐 Size: {image.size[0]}x{image.size[1]}</span>
-            <span class="stat-badge">📁 Format: {image.format if image.format else 'Unknown'}</span>
+            <span class="stat-badge">📁 Format: {uploaded_file.type}</span>
         </div>
         """, unsafe_allow_html=True)
     
