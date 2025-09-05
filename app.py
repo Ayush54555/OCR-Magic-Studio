@@ -197,24 +197,24 @@ with col2:
 
 # Main content area
 # Main content area
+# Main content area
 if uploaded_file is not None:
     # Read the uploaded image file and convert to RGB
     image = Image.open(uploaded_file).convert("RGB")
     
-    # --- Resizing Logic (optional but good to keep) ---
+    # --- Resizing Logic ---
     MAX_SIZE = (1000, 1000)
     image.thumbnail(MAX_SIZE)
     # --- End Resizing ---
     
-    # Convert the PIL image to a NumPy array
-    img_array = np.array(image)
+    # Convert the PIL image to a NumPy array and enforce the data type
+    img_array = np.array(image).astype(np.uint8) # <<< ADD .astype(np.uint8) HERE
     
     # Create two columns for image display
     img_col1, img_col2 = st.columns([1, 1])
     
     with img_col1:
         st.markdown("### 🖼️ Original Image")
-        # Display the image from the NumPy array
         st.image(img_array, use_column_width=True)
         
         # Add image stats
@@ -224,6 +224,7 @@ if uploaded_file is not None:
             <span class="stat-badge">📁 Format: {uploaded_file.type}</span>
         </div>
         """, unsafe_allow_html=True)
+        
     
     # Processing indicator
     with img_col2:
@@ -338,3 +339,4 @@ st.markdown("""
     <p>Powered by EasyOCR • Made with 💜 using Streamlit</p>
 </div>
 """, unsafe_allow_html=True)
+
